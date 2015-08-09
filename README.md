@@ -1,2 +1,2 @@
 # Pyvec
-Raw image vecotorisation for Python
+Raw image vectorisation for Python
