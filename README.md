@@ -9,5 +9,5 @@ A tool that is focused entirely on the vectorisation of raw data to vector forma
 
 ## What can it do now?
 
-* Convert images into arrays
+* Convert images into vectors
 * That's about it... for now!
