@@ -26,7 +26,18 @@ def crop_images(image):
     image = Image.fromarray(new_image_array,"RGB")
     return image
 
-def align_to_square(image):
+def align_to_square(image, custom_height, custom_width):
+    width,height = image.size
+    if height < width:
+        filler = (width - height)/2
+        image_array = np.asarray(image)
+        new_image_array = np.zeros((custom_height, custom_width, 3), dtype="uint8")
+        new_image_array[filler:filler+height,:,:]=image_array[:,:,:]
+        image = Image.fromarray(new_image_array, "RGB")
+    if height > width:
+        length = height - width
+        image_array = np.asarray(image)
+        image = Image.fromarray(image_array[0:height-length,:,:],"RGB")
     return image
 
 def preprocess(directory, custom_height, custom_width):
@@ -41,5 +52,5 @@ def preprocess(directory, custom_height, custom_width):
         image = crop_images(image)
         width, height = image.size
         image = image.resize((custom_height,custom_width*height/width))
-        image = align_to_square(image)
+        image = align_to_square(image, custom_height, custom_width)
         image.save(save_path +image)
