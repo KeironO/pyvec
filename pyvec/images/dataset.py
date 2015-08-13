@@ -1,4 +1,4 @@
-import os, csv
+import os, csv, random
 import numpy as np
 from PIL import Image
 
@@ -43,3 +43,31 @@ def load_images(directory, image_height, image_width):
         train_data[i,:,:,:] = [vectored_image[:,:,0],vectored_image[:,:,1],vectored_image[:,:,2]]
         train_label[i] = image_name[0]
     return train_data, train_label
+
+def vectorise(directory, nb_classes, height, width, number_training_data,number_validation_data):
+    train_data, train_label= load_images(directory)
+    number_images = len(train_label)
+    index = [i for i in range(number_images)]
+    random.shuffle[index]
+    train_data = train_data[index]
+    train_label = train_label[index]
+
+    label = np.utils.to_categorical(train_label, nb_classes)
+
+    X_train = train_data[0 : number_training_data]
+    Y_train = label[0 : number_training_data]
+
+    X_val = train_data[0 : number_validation_data]
+    Y_val = label[0 : number_validation_data]
+
+    X_train = X_train.reshape(X_train.shape[0], 3, height, width)/255
+    X_val = X_val.reshape(X_val.shape[0], 3, height, width)/255
+
+    X_train = X_train.astype("float32")
+    X_val = X_val.astype("float32")
+
+    print('X_train shape:', X_train.shape)
+    print('Y_train shape:', Y_train.shape)
+
+    return X_train, Y_train, X_val, Y_val
+
