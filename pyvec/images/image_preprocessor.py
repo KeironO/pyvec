@@ -2,6 +2,11 @@ import os
 from PIL import Image
 import numpy as np
 
+'''
+    file name: image_preprocessor.py
+    author/s: Keiron O'Shea
+    description: preproccesses the images for standard height and width
+'''
 
 def crop_images(image):
     image_array = np.asarray(image, dtype="uint8")
@@ -40,17 +45,23 @@ def align_to_square(image, custom_height, custom_width):
         image = Image.fromarray(image_array[0:height-length,:,:],"RGB")
     return image
 
+def load_directories(directory):
+	image_list = []
+	for dir_name,dir_names,file_names in os.walk(directory):
+		for file in file_names:
+			label = os.path.basename(os.path.normpath(dir_name))
+			image_list.append([label, file])
+	return image_list
+
 def preprocess(directory, custom_height, custom_width):
     save_path = (directory+"/preProcessed/")
     if not os.path.exists(save_path):
         os.makedirs(save_path)
-    image_list = os.listdir(directory)
-    for i in xrange(len(image_list)):
-        image_name = image_list[i]
-        print "Currently processing: "+ image_name
-        image = Image.open(directory+"/"+image_name)
+    image_list = load_directories(directory)
+    for image_name in image_list:
+        image = Image.open(directory+image_name[0]+"/"+image_name[1])
         image = crop_images(image)
         width, height = image.size
-        image = image.resize((custom_height,custom_width*height/width))
-        image = align_to_square(image, custom_height, custom_width)
-        image.save(save_path +image)
+        image = image.resize(custom_height, custom_width*height/width)
+        image = align_to_square(image)
+        image.save(save_path+image_name[0]+"/"+image_name[1])

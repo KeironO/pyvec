@@ -14,19 +14,15 @@ get_labels()
 
     Allows the correlation of labels to its image for pre-labelling purposes.
 
-    labels_file must be in the following format:
-        image name\tlabel
-        example\t0
-        example2\t1
 '''
-def get_labels(labels_file):
-    table={}
-    with open(labels_file, "rb") as labels_reader:
-        labels_reader = csv.reader(labels_file, delimiter="\t", lineterminator="\n")
-        labels_reader.next() #Skip the heading line
-        for labels in labels_reader:
-            table[labels[0]] = int(labels[1])
-        return table
+
+def get_labels(directory):
+	imglist = []
+	for dirname,dirnames,filenames in os.walk(directory):
+		for filename in filenames:
+			label = os.path.basename(os.path.normpath(dirname))
+			imglist.append([label, filename])
+	return imglist
 
 '''
 load_images()
@@ -36,16 +32,14 @@ load_images()
 
 '''
 def load_images(directory, image_height, image_width):
-    images = os.listdir(directory)
-    number_images = len(images)
-    table = get_labels()
-    train_data = np.empty((number_images,3,image_height,image_width),dtype="float32")
+    image_list = get_labels(directory)
+    number_files = len(image_list)
+    train_data = np.empty((number_files, 3, image_height, image_width), dtype="float32")
     train_data.flatten()
-    train_label = np.empty((number_images,),dtype="uint8")
-    for i in range(number_images):
-        image_name = images[i]
-        images = Image.open(directory+image_name)
+    train_label = np.empty((number_files,), dtype="uint8")
+    for i, image_name in enumerate(image_list):
+        images = Image.open(directory+"/"+image_name[0]+"/"+image_name[1])
         vectored_image = np.asarray(images, dtype="float32")
         train_data[i,:,:,:] = [vectored_image[:,:,0],vectored_image[:,:,1],vectored_image[:,:,2]]
-        train_label[i] = table[image_name.split('.')[0]]
+        train_label[i] = image_name[0]
     return train_data, train_label
