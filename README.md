@@ -20,7 +20,7 @@ We are actively looking for contributions from the free software community. But 
 
 ## Creators
 
-** Keiron O'Shea **
+**Keiron O'Shea**
 
 * http://www.github.com/KeironO/
 * http://users.aber.ac.uk/keo7
