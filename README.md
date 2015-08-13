@@ -1,5 +1,7 @@
 # Pyvec
 
+[![Join the chat at https://gitter.im/KeironO/Pyvec](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/KeironO/Pyvec?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 Pyvec attempts to solve a paramount issue in deep learning, the vectorisation of raw data. The idea of the project is to make vectorisation as easy as humanly possible, and to enable data scientists to focus on more important issues.
 
 ## Quick start
