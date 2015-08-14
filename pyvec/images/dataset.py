@@ -2,6 +2,8 @@ import os, csv, random
 import numpy as np
 from PIL import Image
 from keras.utils import np_utils, generic_utils
+import os.path as path
+
 
 '''
     file name: dataset.py
@@ -46,7 +48,7 @@ def load_images(directory, image_height, image_width):
         train_label[i] = int(string)
     return train_data, train_label
 
-def vectorise(directory, nb_classes, height, width, number_training_data,number_validation_data):
+def vectorise(directory, nb_classes, height, width, split):
     train_data, train_label= load_images(directory, height, width)
     number_images = len(train_label)
     index = [i for i in range(number_images)]
@@ -55,6 +57,9 @@ def vectorise(directory, nb_classes, height, width, number_training_data,number_
     train_label = train_label[index]
 
     label = np_utils.to_categorical(train_label, nb_classes)
+
+    number_training_data = number_images * split
+    number_validation_data = number_images * (1.0 - split)
 
     X_train = train_data[0 : number_training_data]
     Y_train = label[0 : number_training_data]
