@@ -21,9 +21,11 @@ def crop_images(image):
         end_column = j
         j -= 1
     sum_of_row = image_array_0.sum(axis=1)
+    i, j = 0,len(sum_of_row)-1
+    start_row, end_row = i,j
     while(sum_of_row[i] < sum_of_row.min()+(sum_of_row.max()-sum_of_row.min())/50):
         start_row = i
-        i += j
+        i += 1
     while(sum_of_row[j] < sum_of_row.min()+(sum_of_row.max()-sum_of_row.min())/50):
         end_row = j
         j -= 1
@@ -59,9 +61,9 @@ def preprocess(directory, custom_height, custom_width):
         os.makedirs(save_path)
     image_list = load_directories(directory)
     for image_name in image_list:
-        image = Image.open(directory+image_name[0]+"/"+image_name[1])
+        image = Image.open(directory+"/"+image_name[0]+"/"+image_name[1])
         image = crop_images(image)
         width, height = image.size
-        image = image.resize(custom_height, custom_width*height/width)
-        image = align_to_square(image)
+        image = image.resize((custom_height, custom_width*height/width))
+        image = align_to_square(image, custom_height, custom_width)
         image.save(save_path+image_name[0]+"/"+image_name[1])
