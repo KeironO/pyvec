@@ -63,8 +63,9 @@ def preprocess(directory, custom_directory, custom_height, custom_width):
         os.makedirs(save_path)
     image_list = load_directories(directory)
     for image_name in image_list:
+        print image_name[1]
         image = Image.open(directory+"/"+image_name[0]+"/"+image_name[1])
-        image = crop_images(image)
+        # image = crop_images(image)
         width, height = image.size
         image = image.resize((custom_height, custom_width*height/width))
         image = align_to_square(image, custom_height, custom_width)
