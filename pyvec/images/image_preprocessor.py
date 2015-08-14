@@ -1,6 +1,7 @@
 import os
 from PIL import Image
 import numpy as np
+import os.path as path
 
 '''
     file name: image_preprocessor.py
@@ -55,8 +56,9 @@ def load_directories(directory):
 			image_list.append([label, file])
 	return image_list
 
-def preprocess(directory, custom_height, custom_width):
-    save_path = (directory+"/preProcessed/")
+def preprocess(directory, custom_directory, custom_height, custom_width):
+    save_path = path.abspath(path.join(directory, "../", custom_directory))
+    print save_path
     if not os.path.exists(save_path):
         os.makedirs(save_path)
     image_list = load_directories(directory)
@@ -66,4 +68,6 @@ def preprocess(directory, custom_height, custom_width):
         width, height = image.size
         image = image.resize((custom_height, custom_width*height/width))
         image = align_to_square(image, custom_height, custom_width)
-        image.save(save_path+image_name[0]+"/"+image_name[1])
+        if not os.path.exists(save_path + "/" + image_name[0]):
+            os.makedirs(save_path + "/" + image_name[0])
+        image.save(save_path+"/"+image_name[0]+"/"+image_name[1])
