@@ -48,16 +48,7 @@ def load_images(directory, image_height, image_width):
         train_label[i] = int(string)
     return train_data, train_label
 
-def vectorise(directory, nb_classes, height, width, split):
-    train_data, train_label= load_images(directory, height, width)
-    number_images = len(train_label)
-    index = [i for i in range(number_images)]
-    random.shuffle(index)
-    train_data = train_data[index]
-    train_label = train_label[index]
-
-    label = np_utils.to_categorical(train_label, nb_classes)
-
+def splitTrainAndValdidation(split, number_images, train_data, label, height, width):
     number_training_data = number_images * split
     number_validation_data = number_images * (1.0 - split)
 
@@ -73,6 +64,52 @@ def vectorise(directory, nb_classes, height, width, split):
     X_train = X_train.astype("float32")
     X_val = X_val.astype("float32")
 
-
     return X_train, Y_train, X_val, Y_val
+
+
+def splitTrainValidationAndTest(split, number_images, train_data, label, height, width):
+    split_split = (1.0 - (split * 0.05))
+    number_training_data = number_images * split
+    number_validation_data = number_images * (1.0 - split_split)
+    number_test_data = number_images * (1.0 - split_split)
+
+    X_train = train_data[0 : number_training_data]
+    Y_train = label[0 : number_training_data]
+
+    X_val = train_data[0 : number_validation_data]
+    Y_val = label[0 : number_validation_data]
+
+    X_test = train_data[0 : number_test_data]
+    Y_test = label[0 : number_test_data]
+
+    X_train = X_train.reshape(X_train.shape[0], 3, height, width)/255
+    X_val = X_val.reshape(X_val.shape[0], 3, height, width)/255
+    X_test = X_test.reshape(X_test.shape[0], 3, height, width)/255
+
+    X_train = X_train.astype("float32")
+    X_val = X_val.astype("float32")
+    X_test = X_test.astype("float32")
+
+    return X_train, Y_train, X_val, Y_val, X_test, Y_test
+
+
+def vectorise(directory, nb_classes, height, width, split, with_test=False): #False by default
+    train_data, train_label= load_images(directory, height, width)
+    number_images = len(train_label)
+    index = [i for i in range(number_images)]
+    random.shuffle(index)
+    train_data = train_data[index]
+    train_label = train_label[index]
+    label = np_utils.to_categorical(train_label, nb_classes)
+
+    if with_test == False:
+        X_train, Y_train, X_val, Y_val = splitTrainAndValdidation(split, number_images, train_data, label, height, width)
+        return X_train, Y_train, X_val, Y_val
+
+    if with_test == True:
+        X_train, Y_train, X_val, Y_val, X_test, Y_test = splitTrainValidationAndTest(split, number_images, train_data, label, height, width)
+        return X_train, Y_train, X_val, Y_val, X_test, Y_test
+
+
+
 
