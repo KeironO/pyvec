@@ -103,12 +103,6 @@ splitTrainValidationAndTest()
 '''
 
 def splitTrainValidationAndTest(split, number_images, data, label, height, width):
-    # Calculating the percentage of data used for testing and validation data.
-    #split_split = (1.0 - (split * 0.05))
-    #number_validation_data = number_images * (1.0 - split_split)
-    #number_test_data = number_images * (1.0 - split_split)
-
-    
     
     # Calculating the number of training data.
     number_training_data = number_images * split
