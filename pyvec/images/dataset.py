@@ -22,6 +22,12 @@ def more_data(directory, image_list, image_height, image_width):
         rotated_image_2 = cv2.warpAffine(image, rotation_matrix_2, (image_height, image_width))
         rotated_image_3 = cv2.warpAffine(image, rotation_matrix_3, (image_height, image_width))
         rotated_image_4 = cv2.warpAffine(image, rotation_matrix_4, (image_height, image_width))
+        # Temporary!!
+        cv2.imwrite(directory+"/"+images[0]+"/" + str(images[1]).split('.')[0]+".1.jpg",rotated_image_1)
+        cv2.imwrite(directory+"/"+images[0]+"/" + str(images[1]).split('.')[0]+".2.jpg",rotated_image_2)
+        cv2.imwrite(directory+"/"+images[0]+"/" + str(images[1]).split('.')[0]+".3.jpg",rotated_image_3)
+        cv2.imwrite(directory+"/"+images[0]+"/" + str(images[1]).split('.')[0]+".4.jpg",rotated_image_4)
+
 
 '''
 get_labels()
