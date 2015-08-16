@@ -102,23 +102,33 @@ splitTrainValidationAndTest()
 
 '''
 
-def splitTrainValidationAndTest(split, number_images, train_data, label, height, width):
+def splitTrainValidationAndTest(split, number_images, data, label, height, width):
     # Calculating the percentage of data used for testing and validation data.
-    split_split = (1.0 - (split * 0.05))
-    number_validation_data = number_images * (1.0 - split_split)
-    number_test_data = number_images * (1.0 - split_split)
+    #split_split = (1.0 - (split * 0.05))
+    #number_validation_data = number_images * (1.0 - split_split)
+    #number_test_data = number_images * (1.0 - split_split)
 
+    
+    
     # Calculating the number of training data.
     number_training_data = number_images * split
+    
+    number_validation_data = number_images * ((1-split)/2)
+    number_test_data = number_images * ((1-split)/2)
 
+    print 'total number of images: ',number_images
+    #print 'number of data ',data.shape()
+    print 'number of training data: ',number_training_data
+    print 'number of validation data: ',number_validation_data
+    print 'number of testing data: ',number_test_data
 
-    X_train = train_data[0 : number_training_data]
+    X_train = data[0 : number_training_data]
     Y_train = label[0 : number_training_data]
 
-    X_val = train_data[0 : number_validation_data]
+    X_val = data[0 : number_validation_data]
     Y_val = label[0 : number_validation_data]
 
-    X_test = train_data[0 : number_test_data]
+    X_test = data[0 : number_test_data]
     Y_test = label[0 : number_test_data]
 
     # Setting the shapes for optimised vectorisation.
