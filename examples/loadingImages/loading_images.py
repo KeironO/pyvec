@@ -1,8 +1,5 @@
 import imp, os.path as path
 
-
-
-
 def preprocess_images(directory, custom_dir, custom_height, custom_width):
     image_preprocesser.preprocess(directory, custom_dir, custom_height, custom_width)
 
@@ -30,6 +27,7 @@ def split_train_validation_and_test(save_path, num_classes, custom_height, custo
     print('Train data shape:', train_data.shape)
     print('Validation data shape:', val_data.shape)
     print('Test data shape:', test_data.shape)
+
 
 if __name__== "__main__":
 

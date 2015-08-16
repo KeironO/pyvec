@@ -1,4 +1,4 @@
-import os, random
+import os, random, cv2
 import numpy as np
 from PIL import Image
 from keras.utils import np_utils
@@ -10,6 +10,18 @@ from keras.utils import np_utils
     description: simple toolkit to load images, with their adjacent labels
     into arrays - suitable for use with keras/theano.
 '''
+
+def more_data(directory, image_list, image_height, image_width):
+    rotation_matrix_1 = cv2.getRotationMatrix2D((image_height/2,image_width/2), 4, 1)
+    rotation_matrix_2 = cv2.getRotationMatrix2D((image_height/2,image_width/2), 7, 1)
+    rotation_matrix_3 = cv2.getRotationMatrix2D((image_height/2,image_width/2), -7, 1)
+    rotation_matrix_4 = cv2.getRotationMatrix2D((image_height/2,image_width/2), -4, 1)
+    for images in image_list:
+        image = cv2.imread(directory+"/"+images[0]+"/"+images[1])
+        rotated_image_1 = cv2.warpAffine(image, rotation_matrix_1, (image_height, image_width))
+        rotated_image_2 = cv2.warpAffine(image, rotation_matrix_2, (image_height, image_width))
+        rotated_image_3 = cv2.warpAffine(image, rotation_matrix_3, (image_height, image_width))
+        rotated_image_4 = cv2.warpAffine(image, rotation_matrix_4, (image_height, image_width))
 
 '''
 get_labels()
@@ -36,6 +48,8 @@ load_images()
 def load_images(directory, image_height, image_width):
     # Retrieves a list of images.
     image_list = get_labels(directory)
+    if len(image_list) < 5000:
+        more_data(directory, image_list, image_height, image_width)
     number_files = len(image_list)
     # Creates an array ready for the images to go into vectors.
     train_data = np.empty((number_files, 3, image_height, image_width), dtype="float32")
@@ -46,8 +60,7 @@ def load_images(directory, image_height, image_width):
     for i, image_name in enumerate(image_list):
         # Open the files.
         images = Image.open(directory+"/"+image_name[0]+"/"+image_name[1])
-	width, height = images.size
-	images = images.resize((image_height, image_width))
+        images = images.resize((image_height, image_width))
         # Converts the images into float32 representation
         vectored_image = np.asarray(images, dtype="float32")
         # 3 shape vector..
