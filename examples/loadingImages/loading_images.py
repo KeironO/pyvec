@@ -6,7 +6,7 @@ import imp, os.path as path
 def preprocess_images(directory, custom_dir, custom_height, custom_width):
     image_preprocesser.preprocess(directory, custom_dir, custom_height, custom_width)
 
-def split_train_and_validation(save_path, num_classes, custom_height, custom_width, split):
+def split_train_and_validation(directory, num_classes, custom_height, custom_width, split):
     train_data, train_label, val_data, val_label = dataset.vectorise(save_path,num_classes,custom_height,
                                                                     custom_width, split)
     nb_train = len(train_label)

@@ -46,6 +46,8 @@ def load_images(directory, image_height, image_width):
     for i, image_name in enumerate(image_list):
         # Open the files.
         images = Image.open(directory+"/"+image_name[0]+"/"+image_name[1])
+	width, height = images.size
+	images = images.resize((image_height, image_width*height/width))
         # Converts the images into float32 representation
         vectored_image = np.asarray(images, dtype="float32")
         # 3 shape vector..
