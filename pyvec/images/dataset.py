@@ -149,11 +149,12 @@ def splitTrainValidationAndTest(split, number_images, data, label, height, width
     X_train = data[: number_training_data]
     Y_train = label[: number_training_data]
 
-    X_val = data[number_training_data ::]
-    Y_val = label[number_training_data ::]
+    X_val = data[number_training_data :][0 : number_validation_data]
+    Y_val = label[number_training_data :][0 : number_validation_data]
 
-    X_test = data[number_training_data + number_validation_data ::]
-    Y_test = label[number_training_data + number_validation_data ::]
+    # Faulty!
+    X_test = data[number_training_data::][number_validation_data::]
+    Y_test = label[number_training_data::][number_validation_data::]
 
     # Setting the shapes for optimised vectorisation.
     X_train = X_train.reshape(X_train.shape[0], 3, height, width)/255
