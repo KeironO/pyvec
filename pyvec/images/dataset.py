@@ -39,6 +39,9 @@ def get_class_size(image_list):
     list_of_classes = Counter(labels[0] for labels in image_list).iteritems()
     return list_of_classes
 
+
+
+
 '''
 get_labels()
 
@@ -67,6 +70,19 @@ def load_images(directory, image_height, image_width):
     # Retrieves a list of images.
     image_list, class_sizes = get_labels(directory)
     number_files = len(image_list)
+
+
+    list_of_classes = get_class_size(image_list)
+    list30per = [i * 0.3 for i in list_of_classes]
+   
+    for i in list_of_classes:
+        list30per1 = list_of_classes.pop(i)
+        
+        for j in lis30per1:
+            if list_of_classes[i] <= list30per1[j]
+                more_data(directory, image_list, image_hieght, image_width)
+        
+
     # Creates an array ready for the images to go into vectors.
     train_data = np.empty((number_files, 3, image_height, image_width), dtype="float32")
     # Flattens it.
@@ -172,6 +188,7 @@ def splitTrainValidationAndTest(split, number_images, data, label, height, width
 def vectorise(directory, nb_classes, height, width, split, with_test=False): # Get train + val by default.
     # Nasty-ass unoptimised image vectors with labels.
     train_data, train_label= load_images(directory, height, width)
+     
 
     number_images = len(train_label)
     index = [i for i in range(number_images)]
