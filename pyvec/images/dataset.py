@@ -2,6 +2,7 @@ import os, random, cv2
 import numpy as np
 from PIL import Image
 from keras.utils import np_utils
+from collections import Counter
 
 
 '''
@@ -12,22 +13,31 @@ from keras.utils import np_utils
 '''
 
 def more_data(directory, image_list, image_height, image_width):
-    rotation_matrix_1 = cv2.getRotationMatrix2D((image_height/2,image_width/2), 4, 1)
-    rotation_matrix_2 = cv2.getRotationMatrix2D((image_height/2,image_width/2), 7, 1)
-    rotation_matrix_3 = cv2.getRotationMatrix2D((image_height/2,image_width/2), -7, 1)
-    rotation_matrix_4 = cv2.getRotationMatrix2D((image_height/2,image_width/2), -4, 1)
-    for images in image_list:
-        image = cv2.imread(directory+"/"+images[0]+"/"+images[1])
-        rotated_image_1 = cv2.warpAffine(image, rotation_matrix_1, (image_height, image_width))
-        rotated_image_2 = cv2.warpAffine(image, rotation_matrix_2, (image_height, image_width))
-        rotated_image_3 = cv2.warpAffine(image, rotation_matrix_3, (image_height, image_width))
-        rotated_image_4 = cv2.warpAffine(image, rotation_matrix_4, (image_height, image_width))
-        # Temporary!!
-        cv2.imwrite(directory+"/"+images[0]+"/" + str(images[1]).split('.')[0]+".1.jpg",rotated_image_1)
-        cv2.imwrite(directory+"/"+images[0]+"/" + str(images[1]).split('.')[0]+".2.jpg",rotated_image_2)
-        cv2.imwrite(directory+"/"+images[0]+"/" + str(images[1]).split('.')[0]+".3.jpg",rotated_image_3)
-        cv2.imwrite(directory+"/"+images[0]+"/" + str(images[1]).split('.')[0]+".4.jpg",rotated_image_4)
+    response = raw_input("Do you want to produce more data? (Y/N): ")
+    if response in ('Y', 'y', 'Yes', 'yes'):
+        print "Creating new data, this may take awhile depending on the number of images...\n"
+        rotation_matrix_1 = cv2.getRotationMatrix2D((image_height/2,image_width/2), 4, 1)
+        rotation_matrix_2 = cv2.getRotationMatrix2D((image_height/2,image_width/2), 7, 1)
+        rotation_matrix_3 = cv2.getRotationMatrix2D((image_height/2,image_width/2), -7, 1)
+        rotation_matrix_4 = cv2.getRotationMatrix2D((image_height/2,image_width/2), -4, 1)
+        #I want this to go into memory.
+        for images in image_list:
+            image = cv2.imread(directory+"/"+images[0]+"/"+images[1])
+            rotated_image_1 = cv2.warpAffine(image, rotation_matrix_1, (image_height, image_width))
+            rotated_image_2 = cv2.warpAffine(image, rotation_matrix_2, (image_height, image_width))
+            rotated_image_3 = cv2.warpAffine(image, rotation_matrix_3, (image_height, image_width))
+            rotated_image_4 = cv2.warpAffine(image, rotation_matrix_4, (image_height, image_width))
+            cv2.imwrite(directory+"/"+images[0]+"/" + str(images[1]).split('.')[0]+".1.jpg",rotated_image_1)
+            cv2.imwrite(directory+"/"+images[0]+"/" + str(images[1]).split('.')[0]+".2.jpg",rotated_image_2)
+            cv2.imwrite(directory+"/"+images[0]+"/" + str(images[1]).split('.')[0]+".3.jpg",rotated_image_3)
+            cv2.imwrite(directory+"/"+images[0]+"/" + str(images[1]).split('.')[0]+".4.jpg",rotated_image_4)
+    else:
+        pass
 
+
+def get_class_size(image_list):
+    list_of_classes = Counter(labels[0] for labels in image_list).iteritems()
+    return list_of_classes
 
 '''
 get_labels()
@@ -42,7 +52,9 @@ def get_labels(directory):
 		for filename in filenames:
 			label = os.path.basename(os.path.normpath(dirname))
 			imglist.append([label, filename])
-	return imglist
+	class_sizes = get_class_size(imglist)
+	return imglist, class_sizes
+
 
 '''
 load_images()
@@ -53,9 +65,7 @@ load_images()
 '''
 def load_images(directory, image_height, image_width):
     # Retrieves a list of images.
-    image_list = get_labels(directory)
-    if len(image_list) < 5000:
-        more_data(directory, image_list, image_height, image_width)
+    image_list, class_sizes = get_labels(directory)
     number_files = len(image_list)
     # Creates an array ready for the images to go into vectors.
     train_data = np.empty((number_files, 3, image_height, image_width), dtype="float32")
@@ -74,6 +84,7 @@ def load_images(directory, image_height, image_width):
         string = image_name[0]
         #Assigns label to the image.
         train_label[i] = int(string)
+    get_class_size(image_list)
     return train_data, train_label
 
 '''
@@ -93,11 +104,11 @@ def splitTrainAndValdidation(split, number_images, train_data, label, height, wi
     # Calculating the percentage of data used for validation data.
     number_validation_data = number_images * (1.0 - split)
 
-    X_train = train_data[0 : number_training_data]
-    Y_train = label[0 : number_training_data]
+    X_train = train_data[: number_training_data]
+    Y_train = label[: number_training_data]
 
-    X_val = train_data[0 : number_validation_data]
-    Y_val = label[0 : number_validation_data]
+    X_val = train_data[number_training_data ::]
+    Y_val = label[number_training_data ::]
 
     # Setting the shapes for optimised vectorisation.
     X_train = X_train.reshape(X_train.shape[0], 3, height, width)/255
@@ -135,14 +146,14 @@ def splitTrainValidationAndTest(split, number_images, data, label, height, width
     print 'number of validation data: ',number_validation_data
     print 'number of testing data: ',number_test_data
 
-    X_train = data[0 : number_training_data]
-    Y_train = label[0 : number_training_data]
+    X_train = data[: number_training_data]
+    Y_train = label[: number_training_data]
 
-    X_val = data[0 : number_validation_data]
-    Y_val = label[0 : number_validation_data]
+    X_val = data[number_training_data ::]
+    Y_val = label[number_training_data ::]
 
-    X_test = data[0 : number_test_data]
-    Y_test = label[0 : number_test_data]
+    X_test = data[number_training_data + number_validation_data ::]
+    Y_test = label[number_training_data + number_validation_data ::]
 
     # Setting the shapes for optimised vectorisation.
     X_train = X_train.reshape(X_train.shape[0], 3, height, width)/255
