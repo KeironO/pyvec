@@ -28,11 +28,11 @@ def split_train_validation_and_test(save_path, num_classes, custom_height, custo
     print('Validation data shape:', val_data.shape)
     print('Test data shape:', test_data.shape)
 
-
 if __name__== "__main__":
 
     image_preprocesser = imp.load_source('preprocess', '../../pyvec/images/image_preprocessor.py')
     dataset = imp.load_source('dataset', '../../pyvec/images/dataset.py')
+    output = imp.load_source('output', '../../pyvec/output/pickles.py')
 
     directory = "./dataset/originalData/"
     custom_dir = "preProcessed/"
