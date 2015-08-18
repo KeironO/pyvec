@@ -14,6 +14,8 @@ There are a number of ways to get started with Pyvec.
 ## What can it do now?
 
 * Convert images into vectors
+* Serialise data to pickle files.
+* Import serialised pickled data.
 * That's about it... for now!
 
 ## Bugs and feature requests
