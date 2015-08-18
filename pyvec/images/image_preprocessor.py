@@ -2,12 +2,36 @@ import os
 from PIL import Image
 import numpy as np
 import os.path as path
+import cv2
 
 '''
     file name: image_preprocessor.py
     author/s: Keiron O'Shea
     description: preproccesses the images for standard height and width
 '''
+
+def more_data(directory, image_list, image_height, image_width):
+    response = raw_input("Do you want to produce more data? (Y/N): ")
+    if response in ('Y', 'y', 'Yes', 'yes'):
+        print "Creating new data, this may take awhile depending on the number of images...\n"
+        rotation_matrix_1 = cv2.getRotationMatrix2D((image_height/2,image_width/2), 4, 1)
+        rotation_matrix_2 = cv2.getRotationMatrix2D((image_height/2,image_width/2), 7, 1)
+        rotation_matrix_3 = cv2.getRotationMatrix2D((image_height/2,image_width/2), -7, 1)
+        rotation_matrix_4 = cv2.getRotationMatrix2D((image_height/2,image_width/2), -4, 1)
+        #I want this to go into memory.
+        for images in image_list:
+            image = cv2.imread(directory+"/"+images[0]+"/"+images[1])
+            rotated_image_1 = cv2.warpAffine(image, rotation_matrix_1, (image_height, image_width))
+            rotated_image_2 = cv2.warpAffine(image, rotation_matrix_2, (image_height, image_width))
+            rotated_image_3 = cv2.warpAffine(image, rotation_matrix_3, (image_height, image_width))
+            rotated_image_4 = cv2.warpAffine(image, rotation_matrix_4, (image_height, image_width))
+            cv2.imwrite(directory+"/"+images[0]+"/" + str(images[1]).split('.')[0]+".1.jpg",rotated_image_1)
+            cv2.imwrite(directory+"/"+images[0]+"/" + str(images[1]).split('.')[0]+".2.jpg",rotated_image_2)
+            cv2.imwrite(directory+"/"+images[0]+"/" + str(images[1]).split('.')[0]+".3.jpg",rotated_image_3)
+            cv2.imwrite(directory+"/"+images[0]+"/" + str(images[1]).split('.')[0]+".4.jpg",rotated_image_4)
+    else:
+        pass
+
 
 def crop_images(image):
     image_array = np.asarray(image, dtype="uint8")
