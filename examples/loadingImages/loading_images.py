@@ -3,6 +3,9 @@ import imp, os.path as path
 def preprocess_images(directory, custom_dir, custom_height, custom_width):
     image_preprocesser.preprocess(directory, custom_dir, custom_height, custom_width)
 
+def serialise_to_pickle(save_path, train_data, train_label, val_data, val_label, test_data, test_label):
+    output.pickle_data(save_path, train_data, train_label, val_data, val_label, test_data, test_label)
+
 def split_train_and_validation(directory, num_classes, custom_height, custom_width, split):
     train_data, train_label, val_data, val_label = dataset.vectorise(save_path,num_classes,custom_height,
                                                                     custom_width, split)
@@ -27,6 +30,7 @@ def split_train_validation_and_test(save_path, num_classes, custom_height, custo
     print('Train data shape:', train_data.shape)
     print('Validation data shape:', val_data.shape)
     print('Test data shape:', test_data.shape)
+    serialise_to_pickle(save_path, train_data, train_label, val_data, val_label, test_data, test_label)
 
 if __name__== "__main__":
 

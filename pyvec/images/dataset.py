@@ -3,7 +3,7 @@ import numpy as np
 from PIL import Image
 from keras.utils import np_utils
 from collections import Counter
-import image_preprocessor as ip
+# import image_preprocessor as ip
 
 
 '''
