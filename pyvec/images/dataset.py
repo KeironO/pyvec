@@ -50,13 +50,13 @@ get_labels()
 '''
 
 def get_labels(directory):
-	imglist = []
-	for dirname,dirnames,filenames in os.walk(directory):
-		for filename in filenames:
-			label = os.path.basename(os.path.normpath(dirname))
-			imglist.append([label, filename])
-	class_sizes = get_class_size(imglist)
-	return imglist, class_sizes
+    imglist = []
+    for dirname,dirnames,filenames in os.walk(directory):
+        for filename in filenames:
+            label = os.path.basename(os.path.normpath(dirname))
+            imglist.append([label, filename])
+    class_sizes = get_class_size(imglist)
+    return imglist, class_sizes
 
 
 '''
@@ -70,32 +70,27 @@ def load_images(directory, image_height, image_width):
     # Retrieves a list of images.
     image_list, class_sizes = get_labels(directory)
     number_files = len(image_list)
-    
+
     origlist = []
     labels = []
     list_of_classes = get_class_size(image_list)
     for list1 in list_of_classes:
         origlist.append(list1[1])
-	labels.append(list1[0])
-    print origlist
-    print labels	
+        labels.append(list1[0])
     for i in range(len(origlist)):
- 	list2 = origlist[:]
-	labels2 = labels[:]
+        list2 = origlist[:]
+        labels2 = labels[:]
         list2.pop(i)
-	labels2.pop(i)
-        print list2
-	#print labels2
-        for j in range(len(list2)):
-	   print origlist[i]
-	   print list2[j]
-	   perIncrease = float((origlist[i]-list2[j]))/float(origlist[i])
-	   print "percentage increase ",perIncrease
-           if ( perIncrease  > 0.3):
-		# load data of  class of list2[j]
-		print "add more data of class ",labels2[j]
-		#more_data(directory, image_list, image_hieght, image_width)   
-    
+        labels2.pop(i)
+    #print labels2
+    for j in range(len(list2)):
+        perIncrease = float((origlist[i]-list2[j]))/float(origlist[i])
+        print "percentage increase ",perIncrease
+        if ( perIncrease  > 0.3):
+            # load data of  class of list2[j]
+            print "add more data of class ",labels2[j]
+        #more_data(directory, image_list, image_hieght, image_width)
+
     # Creates an array ready for the images to go into vectors.
     train_data = np.empty((number_files, 3, image_height, image_width), dtype="float32")
     # Flattens it.
@@ -162,10 +157,10 @@ splitTrainValidationAndTest()
 '''
 
 def splitTrainValidationAndTest(split, number_images, data, label, height, width):
-    
+
     # Calculating the number of training data.
     number_training_data = number_images * split
-    
+
     number_validation_data = number_images * ((1-split)/2)
     number_test_data = number_images * ((1-split)/2)
 
@@ -201,7 +196,7 @@ def splitTrainValidationAndTest(split, number_images, data, label, height, width
 def vectorise(directory, nb_classes, height, width, split, with_test=False): # Get train + val by default.
     # Nasty-ass unoptimised image vectors with labels.
     train_data, train_label= load_images(directory, height, width)
-     
+
 
     number_images = len(train_label)
     index = [i for i in range(number_images)]
