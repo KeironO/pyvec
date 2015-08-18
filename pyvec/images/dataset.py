@@ -70,19 +70,32 @@ def load_images(directory, image_height, image_width):
     # Retrieves a list of images.
     image_list, class_sizes = get_labels(directory)
     number_files = len(image_list)
-
-
+    
+    origlist = []
+    labels = []
     list_of_classes = get_class_size(image_list)
-    list30per = [i * 0.3 for i in list_of_classes]
-   
-    for i in list_of_classes:
-        list30per1 = list_of_classes.pop(i)
-        
-        for j in lis30per1:
-            if list_of_classes[i] <= list30per1[j]
-                more_data(directory, image_list, image_hieght, image_width)
-        
-
+    for list1 in list_of_classes:
+        origlist.append(list1[1])
+	labels.append(list1[0])
+    print origlist
+    print labels	
+    for i in range(len(origlist)):
+ 	list2 = origlist[:]
+	labels2 = labels[:]
+        list2.pop(i)
+	labels2.pop(i)
+        print list2
+	#print labels2
+        for j in range(len(list2)):
+	   print origlist[i]
+	   print list2[j]
+	   perIncrease = float((origlist[i]-list2[j]))/float(origlist[i])
+	   print "percentage increase ",perIncrease
+           if ( perIncrease  > 0.3):
+		# load data of  class of list2[j]
+		print "add more data of class ",labels2[j]
+		#more_data(directory, image_list, image_hieght, image_width)   
+    
     # Creates an array ready for the images to go into vectors.
     train_data = np.empty((number_files, 3, image_height, image_width), dtype="float32")
     # Flattens it.
