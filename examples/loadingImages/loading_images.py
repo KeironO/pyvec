@@ -36,6 +36,8 @@ def split_train_validation_and_test(save_path, num_classes, custom_height, custo
     print('Train data shape:', train_data.shape)
     print('Validation data shape:', val_data.shape)
     print('Test data shape:', test_data.shape)
+
+    print "\nSaving it to file! \n"
     serialise_to_pickle(save_path, train_data, train_label, val_data, val_label, test_data, test_label)
 
 def load_example(save_path):
