@@ -5,12 +5,35 @@ import os.path as path
 import cv2
 
 '''
-    file name: image_preprocessor.py
+    file name: preprocessor.py
     author/s: Keiron O'Shea
     description: preproccesses the images for standard height and width
 '''
 import cv2
 
+def more_data(directory, image_height, image_width):
+    response = raw_input("Do you want to produce more data? (Y/N): ")
+    image_list, class_sizes = get_labels(directory)
+    if response in ('Y', 'y', 'Yes', 'yes'):
+        print "Creating new data, this may take awhile depending on the number of images...\n"
+        rotation_matrix_1 = cv2.getRotationMatrix2D((image_height/2,image_width/2), 4, 1)
+        rotation_matrix_2 = cv2.getRotationMatrix2D((image_height/2,image_width/2), 7, 1)
+        rotation_matrix_3 = cv2.getRotationMatrix2D((image_height/2,image_width/2), -7, 1)
+        rotation_matrix_4 = cv2.getRotationMatrix2D((image_height/2,image_width/2), -4, 1)
+        #I want this to go into memory.
+        for images in image_list:
+            image = cv2.imread(directory+"/"+images[0]+"/"+images[1])
+            rotated_image_1 = cv2.warpAffine(image, rotation_matrix_1, (image_height, image_width))
+            rotated_image_2 = cv2.warpAffine(image, rotation_matrix_2, (image_height, image_width))
+            rotated_image_3 = cv2.warpAffine(image, rotation_matrix_3, (image_height, image_width))
+            rotated_image_4 = cv2.warpAffine(image, rotation_matrix_4, (image_height, image_width))
+            # print directory+"/"+images[0]+"/" + str(images[1])
+            cv2.imwrite(directory+"/"+images[0]+"/" + str(images[1]).split('.')[0]+".1.jpg",rotated_image_1)
+            cv2.imwrite(directory+"/"+images[0]+"/" + str(images[1]).split('.')[0]+".2.jpg",rotated_image_2)
+            cv2.imwrite(directory+"/"+images[0]+"/" + str(images[1]).split('.')[0]+".3.jpg",rotated_image_3)
+            cv2.imwrite(directory+"/"+images[0]+"/" + str(images[1]).split('.')[0]+".4.jpg",rotated_image_4)
+    else:
+        pass
 
 
 def crop_images(image):
@@ -60,10 +83,16 @@ def load_directories(directory):
 			image_list.append([label, file])
 	return image_list
 
+def load_images(directory):
+    image_list = []
+    for dir_name, dir_name, file_names in os.walk(directory):
+        for file in file_names:
+            image_list.append([file])
+    return image_list
+
 
 def preprocess(directory, custom_directory, custom_height, custom_width):
     save_path = path.abspath(path.join(directory, "../", custom_directory))
-    print save_ath
     if not os.path.exists(save_path):
         os.makedirs(save_path)
     image_list = load_directories(directory)

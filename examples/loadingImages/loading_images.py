@@ -49,10 +49,10 @@ def load_example(save_path):
 
 if __name__== "__main__":
 
-    image_preprocesser = imp.load_source('preprocess', '../../pyvec/images/image_preprocessor.py')
-    dataset = imp.load_source('dataset', '../../pyvec/images/dataset.py')
-    output = imp.load_source('output', '../../pyvec/output/pickles.py')
-    input = imp.load_source('input', '../../pyvec/input/pickled.py')
+    image_preprocesser = imp.load_source('preprocess', '../../pyvec/images/preprocessor.py')
+    dataset = imp.load_source('dataset', '../../pyvec/images/loader.py')
+    output = imp.load_source('output', '../../pyvec/output/save_data.py')
+    input = imp.load_source('input', '../../pyvec/input/load_data.py')
 
     directory = "./dataset/originalData/"
     custom_dir = "preProcessed/"
