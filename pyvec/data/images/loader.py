@@ -1,4 +1,4 @@
-import os, random, cv2, decimal
+import os, random
 import numpy as np
 from PIL import Image
 from keras.utils import np_utils
@@ -84,11 +84,11 @@ def load_images(directory, image_height, image_width):
     return train_data, train_label
 
 def split_dataset(split, number_images, data, label, height, width, with_test = False):
-
     print "Total number of images:", number_images
     if with_test == True:
         number_training_data = number_images * split
         number_test_and_validation_data = number_images * ((1-split)/2)
+        print "Number of test/validation data:", int(number_test_and_validation_data)
 
         train_data = data[: number_training_data]
         train_data = train_data.reshape(train_data.shape[0], 3, height, width)/255
@@ -104,8 +104,7 @@ def split_dataset(split, number_images, data, label, height, width, with_test = 
 
         test_data = data[number_training_data::][number_test_and_validation_data::]
         test_data = test_data.reshape(test_data.shape[0], 3, height, width)/255
-        test_data = test_data.astype("float32"
-                                     "")
+        test_data = test_data.astype("float32")
         test_label = label[number_training_data::][number_test_and_validation_data::]
 
         return train_data, train_label, val_data, val_label, test_data, test_label
@@ -113,6 +112,7 @@ def split_dataset(split, number_images, data, label, height, width, with_test = 
     else:
         number_training_data = number_images * split
         number_validation_data = number_images * (1.0 - split)
+        print "Number of validation data:", int(number_validation_data)
 
         train_data = data[: number_training_data]
         train_data = train_data.reshape(train_data.shape[0], 3, height, width)/255
