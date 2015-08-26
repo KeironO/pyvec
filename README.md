@@ -42,7 +42,7 @@ withTest = False
 To then load the data...
 
 ```
-training_data, training_labels, validation_data, validation_labels = pyvec_api.load_images(directory, height, width, split, withTest
+training_data, training_labels, validation_data, validation_labels, num_classes = pyvec_api.load_images(directory, height, width, split, withTest)
 ```
 
 ## Bugs and feature requests
