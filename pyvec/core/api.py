@@ -1,6 +1,10 @@
 import imp, os
 
-images = imp.load_source('loader', '../../pyvec/data/images/loader.py')
+
+
+relative_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../pyvec/data/images/loader.py'))
+
+images = imp.load_source('loader', relative_dir)
 
 def load_images(directory, height, width, split, with_test):
     nb_classes = len([classes for classes in os.listdir(directory) if os.path.isdir(directory)])
