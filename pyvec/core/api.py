@@ -6,6 +6,12 @@ relative_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../py
 
 images = imp.load_source('loader', relative_dir)
 
+def load_images_unlabelled(directory,height, width):
+    train_data = images.load_images_unlabel(directory, height, width)
+    return train_data
+
+
+
 def load_images(directory, height, width, split, with_test):
     nb_classes = len([classes for classes in os.listdir(directory) if os.path.isdir(directory)])
     if with_test == False:

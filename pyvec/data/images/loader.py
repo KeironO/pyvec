@@ -58,6 +58,8 @@ load_images()
     with a correct label for use in keras/theano.
 
 '''
+
+
 def load_images(directory, image_height, image_width):
     # Retrieves a list of images.
     image_list, class_sizes = get_labels(directory)
@@ -70,8 +72,11 @@ def load_images(directory, image_height, image_width):
     # Creates an array, ready for the labels to go into vectors to correlate with training_data
     train_label = np.empty((number_files,), dtype="uint8")
     for i, image_name in enumerate(image_list):
+    #for i, image_name in image_list.items(): 
         # Open the files.
         images = Image.open(directory+"/"+image_name[0]+"/"+image_name[1])
+	dird = directory+"/"+image_name[0]+"/"+image_name[1]
+	#print dird  
         images = images.resize((image_height, image_width))
         # Converts the images into float32 representation
         vectored_image = np.asarray(images, dtype="float32")
@@ -83,6 +88,25 @@ def load_images(directory, image_height, image_width):
     get_class_size(image_list)
     return train_data, train_label
 
+def load_images_unlabel(directory, image_height, image_width):
+     image_list,labels = get_lables(directory)
+     number_files = len(image_list)
+     
+     train_data = np.empty((number_files, 3, imag_height, image_width), dtype="float32")
+     train_data.flatten()
+  
+     # no need for labels 
+     for i, image_name in enumerate(image_list):
+	#no labels
+	images = Image.open(directory+"/"+image_name[0]+"/"+image_name[1])
+	dird = directory+"/"+image_name[0]+"/"+image_name[1]
+	print dird	 
+	images = images.resize((image_height, image_width))
+	vectored_image = np.asarray(images, dtype = "float32")
+	train_data[i,:,:,:] = [vectored_image[:,:,0],vectored_image[:,:,1],vectored_image[:,:,2]]
+     
+     return train_data
+	
 def split_dataset(split, number_images, data, label, height, width, with_test = False):
     if with_test == True:
         number_training_data = number_images * split
