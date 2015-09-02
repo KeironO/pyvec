@@ -89,10 +89,10 @@ def load_images(directory, image_height, image_width):
     return train_data, train_label
 
 def load_images_unlabel(directory, image_height, image_width):
-     image_list,labels = get_lables(directory)
+     image_list,labels = get_labels(directory)
      number_files = len(image_list)
      
-     train_data = np.empty((number_files, 3, imag_height, image_width), dtype="float32")
+     train_data = np.empty((number_files, 3, image_height, image_width), dtype="float32")
      train_data.flatten()
   
      # no need for labels 
