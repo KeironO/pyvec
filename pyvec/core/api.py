@@ -15,8 +15,8 @@ def load_images_unlabelled(directory,height, width):
 def load_images(directory, height, width, split, with_test):
     nb_classes = len([classes for classes in os.listdir(directory) if os.path.isdir(directory)])
     if with_test == False:
-        train_data, train_label, val_data, val_label = images.vectorise(directory, nb_classes, height, width, split, with_test=False)
-        return train_data, train_label, val_data, val_label, nb_classes
+        train_data, train_label, val_data, val_label, images_names = images.vectorise(directory, nb_classes, height, width, split, with_test=False)
+        return train_data, train_label, val_data, val_label, images_names, nb_classes
     elif with_test == True:
-        train_data, train_label, val_data, val_label, test_data, test_label = images.vectorise(directory, nb_classes, height, width, split, with_test=True)
-        return train_data, train_label, val_data, val_label, test_data, test_label, nb_classes
+        train_data, train_label, val_data, val_label, test_data, test_label, images_names = images.vectorise(directory, nb_classes, height, width, split, with_test=True)
+        return train_data, train_label, val_data, val_label, test_data, test_label, images_names, nb_classes
