@@ -1,13 +1,7 @@
-import scipy.io.wavfile
-import numpy as np
+import scipy.io.wavfile as wavfile
+import numpy
 
 
-'''
-    Very much a WIP.
-'''
-
-def load_audio(data):
-    # rate = int, data = numpy array.
-    rate, data = scipy.io.wavfile(data)
-    data = data.astype("float32")
-    return rate, data
+def vectorise_audio(file):
+    sound_vector = numpy.array(file[1], dtype="float32")
+    return sound_vector
