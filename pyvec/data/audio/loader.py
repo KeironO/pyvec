@@ -9,4 +9,5 @@ import numpy as np
 def load_audio(data):
     # rate = int, data = numpy array.
     rate, data = scipy.io.wavfile(data)
+    data = data.astype("float32")
     return rate, data
