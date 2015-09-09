@@ -78,7 +78,7 @@ def load_images(directory, image_height, image_width):
         images = Image.open(directory+"/"+image_name[0]+"/"+image_name[1])
 	dird = directory+"/"+image_name[0]+"/"+image_name[1]
 	#print dird  
-        images = images.resize((image_height, image_width))
+        images = images.resize((image_height, image_width), Image.ANTIALIAS)
         # Converts the images into float32 representation
         vectored_image = np.asarray(images, dtype="float32")
         # 3 shape vector..
