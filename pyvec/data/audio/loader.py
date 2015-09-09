@@ -3,5 +3,6 @@ import numpy
 
 
 def vectorise_audio(file):
-    sound_vector = numpy.array(file[1], dtype="float32")
+    read_file = wavfile.read(file)
+    sound_vector = numpy.array(read_file[1], dtype="float32")
     return sound_vector
