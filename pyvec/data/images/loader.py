@@ -40,14 +40,13 @@ def load_images(directory, image_height, image_width):
     data = np.empty((number_files, 3, image_height, image_width), dtype="float32")
     data.flatten()
     labels = np.empty((number_files,), dtype="uint8")
-    data_name = np.empty((number_files,), dtype= object)
+    data_name = np.empty((number_files,), dtype=object)
     for i, image_name in enumerate(image_list):
         images = Image.open(directory+"/"+image_name[0]+"/"+image_name[1])
         images = images.resize((image_height, image_width), Image.ANTIALIAS)
         vectored_image = np.asarray(images, dtype="float32")
         data[i,:,:,:] = [vectored_image[:,:,0],vectored_image[:,:,1],vectored_image[:,:,2]]
-        string = image_name[0]
-        labels[i] = int(string)
+        labels[i] = image_name[0]
         data_name[i] = image_list[i][1]
     return data, labels, data_name
 
@@ -90,21 +89,22 @@ def split_dataset(split, number_images, data, label, height, width, with_test = 
         return train_data, train_label, val_data, val_label
 
 def vectorise(directory, nb_classes, height, width, split, with_test=False): # Get train + val by default.
-    train_data, train_label, image_names = load_images(directory, height, width)
-    number_images = len(train_label)
+    data, label, image_names = load_images(directory, height, width)
+    number_images = len(label)
     index = [i for i in range(number_images)]
     random.shuffle(index)
-    train_data = train_data[index]
-    train_label = train_label[index]
+    data = data[index]
+    label = label[index]
     image_names= image_names[index]
 
-    label = np_utils.to_categorical(train_label, nb_classes)
+
+    label = np_utils.to_categorical(label, nb_classes)
 
     if with_test == False:
-        X_train, Y_train, X_val, Y_val = split_dataset(split, number_images, train_data, label, height, width, False)
+        X_train, Y_train, X_val, Y_val = split_dataset(split, number_images, data, label, height, width, False)
         return X_train, Y_train, X_val, Y_val, image_names
     elif with_test == True:
-        X_train, Y_train, X_val, Y_val, X_test, Y_test = split_dataset(split, number_images, train_data, label, height, width, True)
+        X_train, Y_train, X_val, Y_val, X_test, Y_test = split_dataset(split, number_images, data, label, height, width, True)
         return X_train, Y_train, X_val, Y_val, X_test, Y_test, image_names
 
 
