@@ -59,37 +59,34 @@ load_images()
 
 '''
 
-
 def load_images(directory, image_height, image_width):
     # Retrieves a list of images.
     image_list,class_sizes = get_labels(directory)
     number_files = len(image_list)
     # check_class_stabilitiy(image_list)
     # Creates an array ready for the images to go into vectors.
-    train_data = np.empty((number_files, 3, image_height, image_width), dtype="float32")
+    data = np.empty((number_files, 3, image_height, image_width), dtype="float32")
     # Flattens it.
-    train_data.flatten()
+    data.flatten()
     # Creates an array, ready for the labels to go into vectors to correlate with training_data
-    train_label = np.empty((number_files,), dtype="uint8")
-    image_names = np.empty((number_files,), dtype= object)
+    labels = np.empty((number_files,), dtype="uint8")
+    data_name = np.empty((number_files,), dtype= object)
     for i, image_name in enumerate(image_list):
-    #for i, image_name in image_list.items(): 
         # Open the files.
         images = Image.open(directory+"/"+image_name[0]+"/"+image_name[1])
-	dird = directory+"/"+image_name[0]+"/"+image_name[1]
-	#print dird  
+        dird = directory+"/"+image_name[0]+"/"+image_name[1]
+        #print dird
         images = images.resize((image_height, image_width), Image.ANTIALIAS)
         # Converts the images into float32 representation
         vectored_image = np.asarray(images, dtype="float32")
         # 3 shape vector..
-        train_data[i,:,:,:] = [vectored_image[:,:,0],vectored_image[:,:,1],vectored_image[:,:,2]]
+        data[i,:,:,:] = [vectored_image[:,:,0],vectored_image[:,:,1],vectored_image[:,:,2]]
         string = image_name[0]
         #Assigns label to the image.
-        train_label[i] = int(string)
-	image_names[i] = image_list[i][1]
-        #image_names.append(image_list[i][1])
+        labels[i] = int(string)
+        data_name[i] = image_list[i][1]
     get_class_size(image_list)
-    return train_data, train_label, image_names
+    return data, labels, data_name
 
 def split_dataset(split, number_images, data, label, height, width, with_test = False):
 
@@ -113,7 +110,7 @@ def split_dataset(split, number_images, data, label, height, width, with_test = 
         test_data = test_data.reshape(test_data.shape[0], 3, height, width)/255
         test_data = test_data.astype("float32")
         test_label = label[number_training_data::][number_test_and_validation_data::]
-	
+
         return train_data, train_label, val_data, val_label, test_data, test_label
 
     else:
@@ -131,9 +128,9 @@ def split_dataset(split, number_images, data, label, height, width, with_test = 
         val_data = val_data.astype("float32")
 
         val_label = label[number_training_data :][0 : number_validation_data]
-	
+
         return train_data, train_label, val_data, val_label
-        
+
 def vectorise(directory, nb_classes, height, width, split, with_test=False): # Get train + val by default.
     # Nasty-ass unoptimised image vectors with labels.
     train_data, train_label, image_names = load_images(directory, height, width)
@@ -144,7 +141,7 @@ def vectorise(directory, nb_classes, height, width, split, with_test=False): # G
     train_data = train_data[index]
     train_label = train_label[index]
     image_names= image_names[index]
-    
+
     # Convert class vector to binary class matrices for categorial_crossentropy.
     label = np_utils.to_categorical(train_label, nb_classes)
     # Just get train + validation
