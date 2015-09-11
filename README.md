@@ -18,32 +18,10 @@ There are a number of ways to get started with Pyvec.
 * Import serialised pickled data.
 * That's about it... for now!
 
-## Usage
 
-### Loading images
+## Documentation
 
-Firstly, you will be required to load the module in. This is a simple process.
-
-```
-import imp
-pyvec_api = imp.load_source('api', '../../pyvec/core/api.py')
-```
-
-Set the width, height and percentage split.
-
-```
-directory = "path/to/dir"
-height = 1337
-width = 1337
-split = 0.5
-withTest = False
-```
-
-To then load the data...
-
-```
-training_data, training_labels, validation_data, validation_labels, num_classes = pyvec_api.load_images(directory, height, width, split, withTest)
-```
+Documentation can be [found in the project's wiki](https://github.com/KeironO/pyvec/wiki).
 
 ## Bugs and feature requests
 
