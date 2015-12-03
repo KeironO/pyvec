@@ -24,16 +24,15 @@ if __name__== "__main__":
 
     pyvec_api = imp.load_source('api', '../../pyvec/core/api.py')
 
-    directory = "./dataset/originalData/"
-    custom_dir = "preProcessed/"
-    save_path = path.abspath(path.join(directory, "../", custom_dir))
+    save_path = "./dataset/originalData/"
 
-    custom_height = 64
-    custom_width = 64
+    custom_height = 8
+    custom_width = 8
     split = 0.7
 
     print "Providing you with just the data! \n"
     load_image_data(save_path, custom_height, custom_width)
+
     print "\nProviding you with training and validation data! \n"
     with_test = False
     split_train_and_validation(save_path, custom_height, custom_width, split, with_test)

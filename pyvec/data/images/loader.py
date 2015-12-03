@@ -4,6 +4,8 @@ from PIL import Image
 from keras.utils import np_utils
 from collections import Counter
 
+np.set_printoptions(threshold='nan')
+
 '''
     file name: loader.py
     author/s: Keiron O'Shea
@@ -41,9 +43,10 @@ def load_images(directory, image_height, image_width):
     data.flatten()
     labels = np.empty((number_files,), dtype="uint8")
     data_name = np.empty((number_files,), dtype=object)
+    size = image_height, image_width
     for i, image_name in enumerate(image_list):
-        images = Image.open(directory+"/"+image_name[0]+"/"+image_name[1])
-        images = images.resize((image_height, image_width), Image.ANTIALIAS)
+        images = Image.open(directory+"/"+image_name[0]+"/"+image_name[1]).convert("RGB")
+        images = images.resize(size, Image.ANTIALIAS)
         vectored_image = np.asarray(images, dtype="float32")
         data[i,:,:,:] = [vectored_image[:,:,0],vectored_image[:,:,1],vectored_image[:,:,2]]
         labels[i] = image_name[0]
