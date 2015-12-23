@@ -10,12 +10,18 @@ def get_labels(directory):
     return audlist
 
 
-def get_max_length(directory):
-    return 0
-    # ToDo
+def get_sample_blocks(song_array, block_size):
+    blocks = []
+    total_number_samples = song_array.shape[0]
+    number_of_samples = 0
+    while(number_of_samples < total_number_samples):
+        song_block = song_array[number_of_samples:number_of_samples + block_size]
+        if (block.shape[0] < block_size):
+            padding = np.zeros((block_size - block.shape[0],))
+            block = np.concatenate((block, padding))
+        blocks.append(block)
+        number_of_samples += block_size
+    return blocks
 
-def vectorise_audio(directory, length):
-    audlist = get_labels(directory)
-    read_file = wavfile.read(file)
-    sound_vector = numpy.array(read_file[1], dtype="float32")
-    return sound_vector
+
+
