@@ -9,6 +9,10 @@ def get_labels(directory):
             audlist.append([label, file])
     return audlist
 
+def music_to_vector(file_name):
+    data = wav.read(file_name)
+    vector = data[1].astype("float32") / 32767.0
+    return vector, data[0] 
 
 def get_sample_blocks(song_array, block_size):
     blocks = []
