@@ -1,6 +1,8 @@
 import scipy.io.wavfile as wavfile
 import numpy, os.walk
 
+normalize = 32767
+
 def get_labels(directory):
     audlist = []
     for dir_name, dir_names, file_name in os.walk(directory):
@@ -10,9 +12,18 @@ def get_labels(directory):
     return audlist
 
 def music_to_vector(file_name):
-    data = wav.read(file_name)
-    vector = data[1].astype("float32") / 32767.0
+    data = wavfile.read(file_name)
+    vector = data[1].astype("float32") / normalize
     return vector, data[0] 
+
+
+def time_to_fft(time):
+    fft = []
+    for block in time:
+        fft_block = numpy.fft.fft(block)
+        new = numpy.concatenate(numpy.real((fft_block), numpy.imag(fft_block)))
+        fft.append(new)
+    return fft
 
 def get_sample_blocks(song_array, block_size):
     blocks = []
@@ -20,12 +31,10 @@ def get_sample_blocks(song_array, block_size):
     number_of_samples = 0
     while(number_of_samples < total_number_samples):
         song_block = song_array[number_of_samples:number_of_samples + block_size]
-        if (block.shape[0] < block_size):
-            padding = np.zeros((block_size - block.shape[0],))
-            block = np.concatenate((block, padding))
-        blocks.append(block)
+        if (song_block.shape[0] < block_size):
+            padding = numpy.zeros((block_size - song_block.shape[0],))
+            song_block = numpy.concatenate((song_block, padding))
+        blocks.append(song_block)
         number_of_samples += block_size
     return blocks
-
-
 
