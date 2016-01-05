@@ -28,6 +28,14 @@ def get_labels(directory):
             imglist.append([label, filename])
     return imglist
 
+
+def get_labels_from_csv(csvfile):
+    table = {}
+    rows = csv.reader(open(csvfile, "rb"))
+    for row in rows:
+        table[row[0]] = int(row[1])
+    return table
+
 '''
 load_images()
 
