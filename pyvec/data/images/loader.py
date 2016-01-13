@@ -28,14 +28,6 @@ def get_labels(directory):
             imglist.append([label, filename])
     return imglist
 
-
-def get_labels_from_csv(csvfile):
-    table = {}
-    rows = csv.reader(open(csvfile, "rb"))
-    for row in rows:
-        table[row[0]] = int(row[1])
-    return table
-
 '''
 load_images()
 
@@ -118,4 +110,46 @@ def vectorise(directory, nb_classes, height, width, split, with_test=False): # G
         X_train, Y_train, X_val, Y_val, X_test, Y_test = split_dataset(split, number_images, data, label, height, width, True)
         return X_train, Y_train, X_val, Y_val, X_test, Y_test, image_names
 
+
+def load_labels_and_file_name(tsv_file):
+    with open(tsv_file, "rb") as tsv:
+        reader = csv.reader(tsv, delimiter="\t", lineterminator="\n")
+        tsv_list = list(reader)
+        return tsv_list
+
+def load_images_using_tsv(directory, tsv_file, height, width):
+    labels_file_name = load_labels_and_file_name(tsv_file)
+    number_of_images = len(labels_file_name)
+    data = np.empty((number_of_images, 3, height, width), dtype="float32")
+    data.flatten()
+    labels = np.empty((number_of_images, ), dtype=np.dtype("a16"))
+    for i, details in enumerate(labels_file_name):
+        vectored_image = vectorise_image(directory, details[1], height, width)
+        data[i,:,:,:] = [vectored_image[:,:,0],vectored_image[:,:,1],vectored_image[:,:,2]]
+        data /= 255
+        labels[i] = details[0]
+    return data, labels
+
+def vectorise_image(directory, file_name, height, width):
+    loaded_image = Image.open(directory+"/"+file_name)
+    loaded_image = loaded_image.resize((height, width), Image.ANTIALIAS)
+    vectored_image = np.asarray(loaded_image, dtype="float32")
+    return vectored_image
+
+def split_test_and_train(data, labels, split):
+    number_of_images = len(data)
+
+    number_of_training_images = number_of_images * split
+    number_of_testing_images = number_of_images * (1.0 - split)
+
+    train_data = data[:number_of_training_images]
+    train_data = train_data.reshape(train_data.shape[0], 3, data.shape[2], data.shape[3])
+    train_labels = labels[:number_of_training_images]
+
+    test_data = data[number_of_training_images:][0:number_of_testing_images]
+    test_data = test_data.reshape(test_data.shape[0], 3,  data.shape[2], data.shape[3])
+
+    test_labels = labels[number_of_training_images:][0:number_of_testing_images]
+
+    return (train_data, train_labels),(test_data, test_labels)
 

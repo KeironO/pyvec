@@ -1,7 +1,5 @@
 import imp, os
 
-
-
 relative_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../pyvec/data/images/loader.py'))
 
 images = imp.load_source('loader', relative_dir)
@@ -18,3 +16,11 @@ def load_images_and_split(directory, height, width, split, with_test):
     elif with_test == True:
         train_data, train_label, val_data, val_label, test_data, test_label, images_names = images.vectorise(directory, nb_classes, height, width, split, with_test=True)
         return train_data, train_label, val_data, val_label, test_data, test_label, images_names, nb_classes
+
+def load_images_with_tsv(directory, tsv_file, height, width, split=0.0):
+    data, labels = images.load_images_using_tsv(directory, tsv_file, height, width)
+    if str(split) != 0.0:
+        (train_data, train_labels),(test_data, test_labels) = images.split_test_and_train(data, labels, split)
+        return (train_data, train_labels),(test_data, test_labels)
+    else:
+        return data, labels
