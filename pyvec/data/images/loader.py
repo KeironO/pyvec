@@ -117,6 +117,8 @@ def load_labels_and_file_name(tsv_file, directory):
         for files in reader:
             if os.path.isfile(directory+"/"+files[1]) == True:
                 tsv_list.append(files)
+            else:
+                print "Can't find file", files[1]
         return tsv_list
 
 def load_images_using_tsv(directory, tsv_file, height, width):
