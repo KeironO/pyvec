@@ -1,8 +1,7 @@
-import os, random
+import os, random, csv
 import numpy as np
 from PIL import Image
 from keras.utils import np_utils
-from collections import Counter
 
 np.set_printoptions(threshold='nan')
 
