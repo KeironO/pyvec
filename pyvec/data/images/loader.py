@@ -110,14 +110,17 @@ def vectorise(directory, nb_classes, height, width, split, with_test=False): # G
         return X_train, Y_train, X_val, Y_val, X_test, Y_test, image_names
 
 
-def load_labels_and_file_name(tsv_file):
+def load_labels_and_file_name(tsv_file, directory):
+    tsv_list = []
     with open(tsv_file, "rb") as tsv:
         reader = csv.reader(tsv, delimiter="\t", lineterminator="\n")
-        tsv_list = list(reader)
+        for files in reader:
+            if os.path.isfile(directory+"/"+files[1]) == True:
+                tsv_list.append(files)
         return tsv_list
 
 def load_images_using_tsv(directory, tsv_file, height, width):
-    labels_file_name = load_labels_and_file_name(tsv_file)
+    labels_file_name = load_labels_and_file_name(tsv_file, directory)
     number_of_images = len(labels_file_name)
     data = np.empty((number_of_images, 3, height, width), dtype="float32")
     data.flatten()
