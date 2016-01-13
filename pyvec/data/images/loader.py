@@ -132,6 +132,14 @@ def load_images_using_tsv(directory, tsv_file, height, width):
         data[i,:,:,:] = [vectored_image[:,:,0],vectored_image[:,:,1],vectored_image[:,:,2]]
         data /= 255
         labels[i] = details[0]
+    data, labels = shuffle_data(number_of_images, data, labels)
+    return data, labels
+
+def shuffle_data(number_of_images, data, labels):
+    shuffler = [i for i in range(number_of_images)]
+    np.random.shuffle(shuffler)
+    data = data[shuffler]
+    labels = labels[shuffler]
     return data, labels
 
 def vectorise_image(directory, file_name, height, width):
