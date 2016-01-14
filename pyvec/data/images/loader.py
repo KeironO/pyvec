@@ -118,7 +118,7 @@ def load_labels_and_file_name(tsv_file, directory):
             if os.path.isfile(directory+"/"+files[1]) == True:
                 tsv_list.append(files)
             else:
-                print "Can't find file", files[1]
+                print "Not found!"
         return tsv_list
 
 def load_images_using_tsv(directory, tsv_file, height, width):
@@ -129,8 +129,7 @@ def load_images_using_tsv(directory, tsv_file, height, width):
     labels = np.empty((number_of_images, ), dtype=np.dtype("a16"))
     for i, details in enumerate(labels_file_name):
         vectored_image = vectorise_image(directory, details[1], height, width)
-        data[i,:,:,:] = [vectored_image[:,:,0],vectored_image[:,:,1],vectored_image[:,:,2]]
-        data /= 255
+        data[i,:,:,:] = [vectored_image[:,:,0]/255,vectored_image[:,:,1]/255,vectored_image[:,:,2]/255]
         labels[i] = details[0]
     data, labels = shuffle_data(number_of_images, data, labels)
     return data, labels
