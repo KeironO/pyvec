@@ -19,16 +19,16 @@ class Image(object):
         self.name = os.path.basename(file_path).split(".")[0]
         self.colour = colour
         self.details = self.__get_details()
-        self.image_data = self.__load_image(colour)
+        self.image_data = self.__load_image()
 
-    def __load_image(self, colour):
-        if colour == "BW":
+    def __load_image(self, ):
+        if self.colour == "BW":
             return PIL.Image.open(self.file_path).convert("1")
-        elif colour == "G":
+        elif self.colour == "G":
             return PIL.Image.open(self.file_path).convert("LA")
         return PIL.Image.open(self.file_path)
 
-    def to_numpy(self):
+    def vector(self):
         return np.array(self.image_data)
 
     def view(self):
