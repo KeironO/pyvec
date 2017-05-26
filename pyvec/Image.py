@@ -37,7 +37,11 @@ class Image(object):
         plt.show()
 
     def resize(self, height, width):
-        self.image_data.thumbnail([height, width], PIL.Image.ANTIALIAS)
+        self.image_data = self.image_data.resize((width, height), PIL.Image.ANTIALIAS)
+
+    def save(self, file_path):
+        # TODO
+        pass
 
     def __get_details(self):
         return {
@@ -45,3 +49,9 @@ class Image(object):
             "file_path" : self.file_path,
             "colour" : self.colour,
         }
+
+
+if __name__ == "__main__":
+    im = Image("/home/keo7/Pictures/1Cjzvqn.png")
+    im.resize(60, 60)
+    im.view()
